@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">   
+    <link rel="stylesheet" href="style.css">
+    <title>GAME</title>
+</head>
+<body>
+    <div class="voise">
+        <button class="voise1">OFF</button>
+        <button class="voise2">OFF</button> 
+    </div>
+
+    <audio class="audio1" src="audio/BackG_sound.mp3"></audio>
+
+    <div class="buttons">
+        <button class="shop">SKINS  SHOP</button>
+        <button class="HowToPlay">HOW TO PLAY</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <p class="tim">Enter you time:</p>
+    <input type="number" id="timer" min="1" max="600" value="60">
+
+    <span id="scorecount">Points: 0</span>
+
+    <button class="leader">LEADER BORD</button>
+
+    <script type="module" src="JS/car.js"></script>
+    <script type="module" src="JS/main.js"></script>
+    <script type="module" src="JS/life.js"></script>
+    <script type="module" src="JS/background.js"></script>
+
+
+    <div id="footermain">
+        <footer>
+            <section class="footerHomePage">
+                This page was made by Meredov Nazar for STII FIIT -> ZTIAPL
+            </section>
+        </footer>
+    </div>
+
+
+</body>
+</html>
