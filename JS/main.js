@@ -105,6 +105,7 @@ life.draw();
 
 //Start screen
 function startGame() {
+life.count = 3;
 gameStarted = true;
 let timeLeft = document.getElementById("timer").value;
 let main = new Main();
@@ -127,7 +128,6 @@ context.fillText(`Time left: ${timeLeft}`, 400, 40);
 let timerInterval = setInterval(() => {
   timeLeft -= 1;
   main.score++;
-  main.scoreCount.textContent = `Points: ${main.score}`;
   if (timeLeft <= 0 || life.count === 0) {
     clearInterval(timerInterval);
     drawEndMenu();
@@ -141,8 +141,8 @@ let timerInterval = setInterval(() => {
 function drawStartMenu() {
   document.addEventListener('keydown', function (event) {
     if (!gameStarted && event.key === ' ') {
-    backaudio.play();
     startGame();
+    life.count = 3;
     }
     });
 
@@ -164,15 +164,25 @@ function drawEndMenu() {
       drawStartMenu();
      }
     });
-    life.count = 3;
     const backgroundImage = new Image();
     backgroundImage.src = 'photos/back_die.jpg';
-
-    backgroundImage.onload = function() {
-    context.drawImage(backgroundImage, 0, 0);
-    context.drawImage(gameoverImage, 240, 150);
-    context.drawImage(tryagainImage, 240, 250);
-  };
+    const backgroundImage2 = new Image();
+    backgroundImage2.src = 'photos/back_start2.jfif';
+    if(life.count ===0){
+      backgroundImage.onload = function() {
+        context.drawImage(backgroundImage, 0, 0);
+        context.drawImage(gameoverImage, 240, 150);
+        context.drawImage(tryagainImage, 240, 250);
+      };
+    }
+    if(life.count >0){
+      backgroundImage.onload = function() {
+        context.drawImage(backgroundImage2, 0, 0);
+        context.drawImage(gameoverImage, 240, 150);
+        context.drawImage(tryagainImage, 240, 250);
+      };
+    }
+    life.count = 3;
 }
 
 //Hudba
@@ -258,8 +268,7 @@ function drawLeader() {
   context.textAlign = "center";
   context.fillText("LeaderBord:", 500,50);
 
-  const leaderboard = [];
-
+  let leaderboard = [];
 
 
 
