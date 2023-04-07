@@ -117,6 +117,7 @@ let timerInterval = setInterval(() => {
     gameStarted = false;
     drawEndMenu();
     Hscore=time-timeLeft;
+    score = Hscore + score;
     clearInterval(timerInterval);
     return;
   }
@@ -146,11 +147,11 @@ function drawStartMenu() {
 //Game over screen
 function drawEndMenu() {
   let savedScore = localStorage.getItem('score');
-if (savedScore > Hscore) {
-  Hscore = savedScore;
-  localStorage.setItem('Hscore', Hscore);
+if (savedScore > score) {
+  score = savedScore;
+  localStorage.setItem('score', score);
 } else {
-  Hscore = Hscore;
+  score = score;
 }
 
   document.addEventListener('keydown', function (event) {
