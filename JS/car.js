@@ -1,4 +1,3 @@
-
 export class Car {
   constructor(context) {
     this.context = context;
@@ -50,7 +49,7 @@ export class Car {
     const barrierTop = canvas.height / 9;
     const barrierBottom = canvas.height - canvas.height / 6.5;
 
-    this.cd = 10000;
+    this.cd = null;
 
     const ButtonVoise = document.querySelector('.voise2');
     this.selector = false;
@@ -158,9 +157,11 @@ export class Car {
   }
 
   draw() {
-    this.drawSmoke();
-
-   // this.drawFire();
+    if(this.speed === 1){
+      this.drawSmoke();
+    }else{
+      this.drawFire();
+    }
 
       for (let i = 1; i < this.path.length; i++) {
         this.context.save();
@@ -238,8 +239,24 @@ drawSmoke() {
 
 drawFire() {
   this.context.save();
-  this.context.translate(this.x-15, this.y+15);
-  this.context.rotate((this.angle * Math.PI)/180);
+  
+  if(this.angle === 0){
+    this.context.translate(this.x, this.y+45);
+    this.context.rotate(this.angle -80);
+  }
+  if(this.angle === 90){   
+    this.context.translate(this.x-45, this.y);
+    this.context.rotate((this.angle * Math.PI));
+  }
+  if(this.angle === -90){  
+    this.context.translate(this.x+45, this.y);
+    this.context.rotate((this.angle * Math.PI));
+  }
+  if(this.angle === 180){
+    this.context.translate(this.x, this.y-45);
+    this.context.rotate(this.angle -100);
+  }
+
   this.context.drawImage(
     this.fire,
     this.fire.frameIndex * this.fire.frameWidth,
@@ -263,5 +280,6 @@ drawFire() {
       this.fire.frameIndex = 0;
     }
   }
-}
+ }
+
 }

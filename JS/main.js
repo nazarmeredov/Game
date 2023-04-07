@@ -15,6 +15,10 @@ const gameoverImage = new Image();
 gameoverImage.src = 'photos/GAME-OVER.png';
 const tryagainImage = new Image();
 tryagainImage.src = 'photos/Press-ENTER.png';
+const gameoverImage2 = new Image();
+gameoverImage2.src = 'photos/GAME-OVER2.png';
+const tryagainImage2 = new Image();
+tryagainImage2.src = 'photos/Press-ENTER2.png';
 const startImage = new Image();
 startImage.src = 'photos/Pres-SPACE.png';
 const carstartImage = new Image();
@@ -29,92 +33,73 @@ backaudio.loop = true;
 const howToPlayButton = document.querySelector(".HowToPlay");
 const shopButton = document.querySelector(".shop");
 const leaderButton = document.querySelector(".leader");
-let gameStarted = false;
+let gameStarted = true;
+let score = 0;
+let Hscore = 0;
 
 //cheat menu
 document.addEventListener('keydown', function (event) {
-  if(event.key === 'й') {
-  life.decrease();
+  if(event.key === 'q') {
+  life.decrease();   // kill hero
   }
-  });
+  if (event.key === 'p') { 
+    localStorage.removeItem('leaderboard'); //clear ldboard
+  }
+});
 
   BackVoise();
   ButtonBackVoise.onclick = BackVoise;
 
   drawStartMenu();
   howToPlayButton.addEventListener("click", () => {
-    if (gameStarted === false) {
+    if (gameStarted === true) {
       drawHowToPlay();
-      gameStarted = true
+      gameStarted = false
       howToPlayButton.textContent = "PLAY";
     } else {
       drawStartMenu();
-      gameStarted = false;
+      gameStarted = true;
       howToPlayButton.textContent = "HOW TO PLAY";
     }
   });
   shopButton.addEventListener("click", () => {
-    if (gameStarted === false) {
+    if (gameStarted === true) {
       drawShop();
-      gameStarted = true
+      gameStarted = false
       shopButton.textContent = "BACK";
     } else {
       drawStartMenu();
-      gameStarted = false;
+      gameStarted = true;
       shopButton.textContent = "SKINS SHOP";
     }
   });
   leaderButton.addEventListener("click", () => {
-    if (gameStarted === false) {
+    if (gameStarted === true) {
       drawLeader();
-      gameStarted = true
+      gameStarted = false
       leaderButton.textContent = "BACK";
     } else {
       drawStartMenu();
-      gameStarted = false;
+      gameStarted = true;
       leaderButton.textContent = "LEADER BORD:";
     }
   });
 
-
-//main
-class Main {
-constructor() {
-this.lives = 3;
-this.score = 0;
-this.scoreCount = document.querySelector('#scorecount');
-}
-
-update() {
-if (this.lives === 0) {
-this.lives = 3;
-drawStartMenu();
-return;
-}
-car.update();
-this.scoreCount.textContent = `Points: ${this.score}`;
-}
-
-draw() {
-back.draw(car.x, car.y);
-car.draw();
-life.draw();
-}
-
-}
-
 //Start screen
-function startGame() {
-life.count = 3;
-gameStarted = true;
-let timeLeft = document.getElementById("timer").value;
-let main = new Main();
+function startGame() { 
+  score=score+Hscore;
 
+    life.count = 3;
+    let timeLeft = document.getElementById("timer").value;
+    let time = timeLeft;
+    let main = new Main();
+  
 let timerInterval2 = setInterval(() => {
 context.clearRect(0, 0, canvas.width, canvas.height);
 if (timeLeft <= 0 || life.count === 0) {
-  clearInterval(timerInterval2);
+  gameStarted = false;
   drawEndMenu();
+  clearInterval(timerInterval2);
   return;
 }
 main.update();
@@ -127,25 +112,20 @@ context.fillText(`Time left: ${timeLeft}`, 400, 40);
 
 let timerInterval = setInterval(() => {
   timeLeft -= 1;
-  main.score++;
+
   if (timeLeft <= 0 || life.count === 0) {
-    clearInterval(timerInterval);
+    gameStarted = false;
     drawEndMenu();
+    Hscore=time-timeLeft;
+    clearInterval(timerInterval);
     return;
   }
 }, 1000);
-
-}
+localStorage.setItem('score', score);
+  }
 
 //Start Menu screen
 function drawStartMenu() {
-  document.addEventListener('keydown', function (event) {
-    if (!gameStarted && event.key === ' ') {
-    startGame();
-    life.count = 3;
-    }
-    });
-
   const backgroundImage = new Image();
   backgroundImage.src = 'photos/Back_start.jfif';
 
@@ -154,16 +134,33 @@ function drawStartMenu() {
     context.drawImage(startImage, 150, 200);
     context.drawImage(carstartImage, 250, 200);
   };
+
+  document.addEventListener('keydown', function (event) {
+    if (gameStarted && event.key === ' ') {
+    life.count = 3;
+    startGame();
+    }
+    });
 }
 
 //Game over screen
 function drawEndMenu() {
+  let savedScore = localStorage.getItem('score');
+if (savedScore > Hscore) {
+  Hscore = savedScore;
+  localStorage.setItem('Hscore', Hscore);
+} else {
+  Hscore = Hscore;
+}
+
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
-      gameStarted = false;
+      life.count = 3;
+      gameStarted = true;
       drawStartMenu();
      }
     });
+
     const backgroundImage = new Image();
     backgroundImage.src = 'photos/back_die.jpg';
     const backgroundImage2 = new Image();
@@ -175,14 +172,13 @@ function drawEndMenu() {
         context.drawImage(tryagainImage, 240, 250);
       };
     }
-    if(life.count >0){
+    if(life.count > 0){
       backgroundImage.onload = function() {
         context.drawImage(backgroundImage2, 0, 0);
-        context.drawImage(gameoverImage, 240, 150);
-        context.drawImage(tryagainImage, 240, 250);
+        context.drawImage(gameoverImage2, 240, 150);
+        context.drawImage(tryagainImage2, 240, 250);
       };
     }
-    life.count = 3;
 }
 
 //Hudba
@@ -210,7 +206,7 @@ function drawHowToPlay() {
   context.fillRect(modalX, modalY, modalWidth, modalHeight);
 
   context.fillStyle = "white";
-  context.font = "bold 24px Arial";
+  context.font = "bold 24px Verdana";
   context.textAlign = "center";
   context.fillText("How play in this game?", modalX + modalWidth / 2, modalY + 50);
 
@@ -250,7 +246,7 @@ function drawShop() {
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   context.fillStyle = "white";
-  context.font = "bold 24px Arial";
+  context.font = "bold 24px Verdana";
   context.textAlign = "center";
   context.fillText("SHOP:", 500,50);
 
@@ -260,25 +256,59 @@ function drawShop() {
 
 //Leader Bord
 function drawLeader() {
+
   context.fillStyle = "green";
   context.fillRect(0, 0, canvas.width, canvas.height);
-
+  
   context.fillStyle = "white";
-  context.font = "bold 24px Arial";
+  context.font = "bold 36px Verdana";
   context.textAlign = "center";
   context.fillText("LeaderBord:", 500,50);
+  
+  let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+  let playerName = document.getElementById("name").value;
+  let existingPlayer = leaderboard.find(player => player.name === playerName);
+  if (existingPlayer) {
+  existingPlayer.score += Hscore;
+  existingPlayer.date = new Date();
+  } else {
+  leaderboard.push({score: Hscore, date: new Date(), name: playerName});
+  }
+  
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, 10);
+  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+  
+  context.fillStyle = "white";
+  context.font = "bold 22px Verdana";
+  context.fillText("Date", 150, 100);
+  context.fillText("Name", 500, 100);
+  context.fillText("Score", 850, 100);
+  
+  context.fillStyle = "white";
+  context.font = "18px Arial";
+  for (let i = 0; i < leaderboard.length; i++) {
+  context.fillText(leaderboard[i].date.toLocaleString(), 150, 130 + i * 30);
+  context.fillText(leaderboard[i].name, 500, 130 + i * 30);
+  context.fillText(leaderboard[i].score, 850, 130 + i * 30);
+  }
+}
 
-  let leaderboard = [];
+//main
+class Main {
+constructor() {
+this.lives = 3;
+this.scoreCount = document.querySelector('#scorecount');
+}
 
+update() {
+this.scoreCount.textContent = `Points: ${score}`;
+car.update();
+}
 
-
-
-
-
-
-
-
-
-
-
+draw() {
+back.draw(car.x, car.y);
+life.draw();
+car.draw();
+}
 }

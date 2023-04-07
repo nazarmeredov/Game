@@ -148,8 +148,8 @@
     padding: 50px; 
     border-radius: 10px; 
     position: absolute;
-    top: 30%;
-    left: 5%;
+    top: 24%;
+    left: 3%;
   }
 
 
@@ -178,8 +178,8 @@
     transition: background 300ms ease-in-out;
 
     position: absolute;
-    left: 8%;
-    top: 50%;
+    left: 6%;
+    top: 43%;
   }
   .leader:hover {
     background-position: 0;
@@ -224,4 +224,43 @@
   }
   .voise2{
     background: url(photos/sound.png) no-repeat;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  label {
+    color: #fff;
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    position: absolute;
+    top: 62%;
+    left: 9%;
+  }
+  
+  input[type="text"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 65%;
+    left: 7%;
+  }
+  
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #666;
   }
